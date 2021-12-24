@@ -2,10 +2,7 @@ package com.book.publisher.entity;
 
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -16,4 +13,7 @@ public class Member {
     private Long id;
 
     private String name;
+
+    @Embedded
+    private Address address;
 }
