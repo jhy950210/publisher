@@ -1,4 +1,30 @@
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: utf-8
+
 spring:
+  profiles:
+    group:
+      "jhy":"jhy,common"
+      "ojh":"ojh,common"
+---
+spring:
+  config:
+    activate:
+      on-profile: "common"
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+
+
+
+---
+
+spring:
+  profiles: jhy
   datasource:
     url: jdbc:h2:tcp://localhost/~/publisher;
     username: jhy
@@ -22,3 +48,23 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "ojh"
+
+  #Datasource postgresql
+  datasource:
+    url: jdbc:postgresql://132.226.175.32:5432/postgres
+    username: postgres
+    password: 12345678
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+
+
+
