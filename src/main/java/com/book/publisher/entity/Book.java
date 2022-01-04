@@ -2,18 +2,17 @@ package com.book.publisher.entity;
 
 
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @Entity
 @DynamicInsert
+@EntityListeners(AuditingEntityListener.class)
 public class Book {
     @Id @GeneratedValue
     @Column(name = "book_id")
@@ -29,6 +28,6 @@ public class Book {
     @Column(columnDefinition = "timestamp(0)")
     private Date publishDate;
 
-    @ColumnDefault("current_timestamp")
+    @CreatedDate
     private Date regDt;
 }

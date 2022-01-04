@@ -17,7 +17,7 @@ public class BookApiController {
 
     private final BookService bookService;
 
-    @PostMapping(value = "/bookInsert")
+    @PostMapping(value = "/books")
     public ResponseEntity<Book> bookInsert(@RequestBody Book book) {
 
         Book newBook = bookService.saveBook(book);
