@@ -23,16 +23,29 @@ public class MemberService {
     }
 
     @Transactional
-    public void join(Member member){
+    public Member join(Member member){
         validateDuplicateMember(member); // 중복 회원 검증
 
-        memberRepository.save(member);
+        Member saveMember = memberRepository.save(member);
+
+        return saveMember;
     }
 
     private void validateDuplicateMember(Member member) {
         Optional<Member> findMember = memberRepository.findByResidentRegistrationNumber(member.getResidentRegistrationNumber());
 
-        findMember.orElseThrow(() -> new IllegalStateException("이미 존재하는 회원입니다."));
+        if(findMember.isPresent()){
+            throw new IllegalStateException();
+        }
+    }
+
+    @Transactional
+    public Member updateMember(Long id, Member member){
+        Member findMember = memberRepository.findById(id).orElseThrow(IllegalStateException::new);
+
+        findMember.changeInfo(member.getEmail(), member.getPhoneNumber(), member.getAddress());
+
+        return findMember;
     }
 
 }

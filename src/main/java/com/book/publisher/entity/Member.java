@@ -34,4 +34,11 @@ public class Member extends BaseEntity{
         this.residentRegistrationNumber = residentRegistrationNumber;
         this.address = address;
     }
+
+    // 회원정보 수정
+    public void changeInfo(String email, String phoneNumber, Address address){
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
 }
