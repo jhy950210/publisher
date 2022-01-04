@@ -10,7 +10,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalStateException.class)
     private ResponseEntity handleIllegalStateException(IllegalStateException e){
-        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.ALLREADY_EXIST_MEMBER);
+        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.BAD_REQUEST);
         HttpStatus httpStatus = HttpStatus.valueOf(errorResponse.getStatus());
 
         return ResponseEntity.status(httpStatus).body(errorResponse);

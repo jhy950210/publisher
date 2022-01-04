@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     // Member
-    ALLREADY_EXIST_MEMBER(400, "이미 존재하는 회원입니다.");
+    BAD_REQUEST(400, "요구된 처리를 하기에 적합한 상태가 아닙니다.");
 
     private int status;
     private String message;
