@@ -18,6 +18,7 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+    cache: false
 
 
 ---
@@ -64,6 +65,12 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
 
 logging:
   level:

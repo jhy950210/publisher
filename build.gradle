@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.5.7'
 	implementation 'org.springframework.boot:spring-boot-starter-web:2.5.7'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services:2.5.7'
+	implementation 'org.springframework.boot:spring-boot-devtools:2.5.7'
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 
 	// 개발시

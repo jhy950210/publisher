@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,7 +26,8 @@ public class Book {
     private int price;
     private String author;
 
-    @Column(columnDefinition = "timestamp(0)")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "YYYY-MM-DD")
     private Date publishDate;
 
     @CreatedDate
