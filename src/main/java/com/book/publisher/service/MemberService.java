@@ -3,6 +3,7 @@ package com.book.publisher.service;
 import com.book.publisher.entity.Member;
 import com.book.publisher.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,12 @@ public class MemberService {
         List<Member> members = memberRepository.findAll();
 
         return members;
+    }
+
+    public Member getMember(Long id){
+        Member member = memberRepository.findById(id).orElseThrow(NullPointerException::new);
+
+        return member;
     }
 
     @Transactional

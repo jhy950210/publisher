@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,6 +48,7 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("회원가입")
     void memberJoin(){
         //given
         Address address = Address.builder()
@@ -68,5 +70,14 @@ class MemberServiceTest {
 
         //then
         assertEquals(memberService.getMembers().size(),3);
+    }
+
+    @Test
+    @DisplayName("회원 불러오기")
+    void getMember(){
+        //given
+        Member member = memberService.getMember(1L);
+
+        assertEquals(member.getName(), "test2");
     }
 }
