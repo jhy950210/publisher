@@ -6,10 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.Id;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Id> , BookRepositoryCustom{
 
     ArrayList<Book> findByBookTitleLike(String bookTitle);
 
+    Optional<Book> findById(Long id);
 }

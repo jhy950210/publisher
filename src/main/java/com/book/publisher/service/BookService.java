@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+
 public class BookService {
     private final BookRepository bookRepository;
 
@@ -23,6 +24,11 @@ public class BookService {
     @Transactional
     public List<Book> bookList() {
         return this.bookRepository.findAll();
+    }
+
+    @Transactional
+    public Book bookInfo(Long id) {
+        return this.bookRepository.findById(id).orElse(new Book());
     }
 
 }

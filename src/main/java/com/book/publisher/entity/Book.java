@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -26,10 +27,10 @@ public class Book {
     private int price;
     private String author;
 
-    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "YYYY-MM-DD")
-    private Date publishDate;
+    private LocalDate publishDate;
 
     @CreatedDate
+    @Column(columnDefinition = "timestamp(0)")
     private Date regDt;
 }
