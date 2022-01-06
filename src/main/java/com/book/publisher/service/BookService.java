@@ -31,4 +31,13 @@ public class BookService {
         return this.bookRepository.findById(id).orElse(new Book());
     }
 
+    @Transactional
+    public void bookDelete(Book book) {
+        this.bookRepository.delete(book);
+    }
+
+    @Transactional
+    public List<Book> bookSearchList(Book book) {
+        return this.bookRepository.findByBookTitleContainsAndAuthorOrderByRegDt(book.getBookTitle(),book.getAuthor());
+    }
 }

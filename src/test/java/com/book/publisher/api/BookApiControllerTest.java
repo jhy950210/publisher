@@ -20,24 +20,20 @@ class BookApiControllerTest {
     @Autowired
     BookService bookService;
 
-    @RepeatedTest(value = 5)
-    @BeforeAll
-    static void bookEntity(@Autowired BookService bookService) {
-        int i = 0;
-        Book book = new Book();
-        ++i;
-        book.setBookTitle("책제목"+i);
-        book.setAuthor("작가"+i);
-        book.setPrice(1000);
-        book.setPublishDate(LocalDate.parse("2021-02-13").plusDays(i));
-        book.setSubTitle("부제"+i);
-
-        bookService.saveBook(book);
-
-        List<Book> bookList = bookService.bookList();
-
-        assertThat(i).isEqualTo(i);
-    }
+//    @RepeatedTest(value = 5)
+//    @BeforeAll
+//    static void bookEntity(@Autowired BookService bookService,RepetitionInfo ri) {
+//        Book book = new Book();
+//        book.setBookTitle("책제목"+ ri.getCurrentRepetition());
+//        book.setAuthor("작가"+ri.getCurrentRepetition());
+//        book.setPrice(1000);
+//        book.setPublishDate(LocalDate.parse("2021-02-13").plusDays(ri.getCurrentRepetition()));
+//        book.setSubTitle("부제"+ri.getCurrentRepetition());
+//
+//        Book newBook = bookService.saveBook(book);
+//
+//        assertThat(book.getBookTitle()).isEqualTo(newBook.getBookTitle());
+//    }
 
     @Test
     @DisplayName("책 저장")
@@ -63,5 +59,40 @@ class BookApiControllerTest {
         List<Book> bookList = bookService.bookList();
 
         assertThat(bookList.get(0).getBookTitle()).isEqualTo(bookService.bookInfo((long)1).getBookTitle());
+    }
+
+    @Test
+    @DisplayName("책 수정")
+    void bookUpdate() {
+        Book book = bookService.bookInfo(1L);
+
+        book.setBookTitle("책 제목 수정");
+
+        Book newBook = bookService.saveBook(book);
+
+        assertThat(book.getBookTitle())
+                .isEqualTo(newBook.getBookTitle());
+    }
+
+    @Test
+    @DisplayName("책 삭제")
+    void bookDelete() {
+        for(int i=0;i<5;i++) {
+            Book book = new Book();
+            book.setBookTitle("책제목"+i);
+            book.setAuthor("작가"+i);
+            book.setPrice(i*1000);
+            book.setPublishDate(LocalDate.parse("2021-02-13").plusDays(i));
+            book.setSubTitle("부제"+i);
+        }
+
+        int random = (int)(Math.random()*5)+1;
+
+        Book newBook = bookService.bookInfo((long)random);
+        bookService.bookDelete(newBook);
+
+        assertThat(bookService.bookInfo((long)random).getBookTitle()).isNull();
+
+
     }
 }

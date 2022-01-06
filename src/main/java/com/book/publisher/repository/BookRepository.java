@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Id> , BookRepositoryCustom{
 
-    ArrayList<Book> findByBookTitleLike(String bookTitle);
+    ArrayList<Book> findByBookTitleContainsAndAuthorOrderByRegDt(String bookTitle, String author);
 
     Optional<Book> findById(Long id);
 }

@@ -5,10 +5,7 @@ import com.book.publisher.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +27,20 @@ public class BookApiController {
     public ResponseEntity<List<Book>> bookList() {
         List<Book> bookArrayList = bookService.bookList();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookArrayList);
+        return ResponseEntity.status(HttpStatus.OK).body(bookArrayList);
+    }
+
+//    @GetMapping("/books")
+//    public ResponseEntity<Book> bookInfo(@RequestBody Book book) {
+//        Book bookInfo = bookService.bookInfo(book.getId());
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(bookInfo);
+//    }
+
+    @PutMapping("/books")
+    public ResponseEntity<Book> bookUpdate(@RequestBody Book book) {
+        Book newBook = bookService.bookInfo(book.getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body(newBook);
     }
 }

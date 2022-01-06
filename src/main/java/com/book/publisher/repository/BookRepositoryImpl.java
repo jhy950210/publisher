@@ -18,4 +18,6 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
     public ArrayList<Book> findBookList() {
         return null;
     }
+
+
 }
