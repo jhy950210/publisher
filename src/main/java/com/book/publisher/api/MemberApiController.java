@@ -49,6 +49,13 @@ public class MemberApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(updateMember);
     }
 
+    @DeleteMapping("/members/{id}")
+    public ResponseEntity deleteMember(@PathVariable("id") Long id){
+        memberService.deleteMember(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     @Data
     static class UpdateMemberRequest{
         private String email;

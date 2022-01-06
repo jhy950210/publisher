@@ -50,9 +50,26 @@ public class MemberService {
     public Member updateMember(Long id, Member member){
         Member findMember = memberRepository.findById(id).orElseThrow(IllegalStateException::new);
 
-        findMember.changeInfo(member.getEmail(), member.getPhoneNumber(), member.getAddress());
+        //findMember.changeInfo(member.getEmail(), member.getPhoneNumber(), member.getAddress());
+
+        if(member.getEmail() != null){
+            findMember.setEmail(member.getEmail());
+        }
+
+        if(member.getPhoneNumber() != null){
+            findMember.setPhoneNumber(member.getPhoneNumber());
+        }
+
+        if(member.getAddress() != null){
+            findMember.setAddress(member.getAddress());
+        }
 
         return findMember;
+    }
+
+    @Transactional
+    public void deleteMember(Long id){
+        memberRepository.deleteById(id);
     }
 
 }
