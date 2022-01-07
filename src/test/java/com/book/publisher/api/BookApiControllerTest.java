@@ -2,7 +2,8 @@ package com.book.publisher.api;
 
 import com.book.publisher.entity.Book;
 import com.book.publisher.service.BookService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ class BookApiControllerTest {
 
     @Autowired
     BookService bookService;
+
 
 //    @RepeatedTest(value = 5)
 //    @BeforeAll
@@ -56,6 +58,8 @@ class BookApiControllerTest {
     @Test
     @DisplayName("책 리스트 검색")
     void bookList() {
+        int random = (int)(Math.random()*5)+1;
+
         List<Book> bookList = bookService.bookList();
 
         assertThat(bookList.get(0).getBookTitle()).isEqualTo(bookService.bookInfo((long)1).getBookTitle());
@@ -92,7 +96,14 @@ class BookApiControllerTest {
         bookService.bookDelete(newBook);
 
         assertThat(bookService.bookInfo((long)random).getBookTitle()).isNull();
-
-
     }
+
+//    @Test
+//    @DisplayName("queryDsl 테스트")
+//    void queryDslTest() {
+//        Book book = new Book();
+//        book.setBookTitle("제목");
+//        //book.setAuthor("작가");
+//        List<Book> books = bookService.bookSearchList(book);
+//    }
 }

@@ -1,10 +1,11 @@
 package com.book.publisher.repository;
 
 import com.book.publisher.entity.Book;
+import com.book.publisher.entity.QBook;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
+import java.util.List;
 
 public class BookRepositoryImpl implements BookRepositoryCustom {
 
@@ -15,8 +16,11 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
     }
 
     @Override
-    public ArrayList<Book> findBookList() {
-        return null;
+    public List<Book> searchBookList(QBook book) {
+        return queryFactory
+                .selectFrom(book)
+                .where()
+                .fetch();
     }
 
 

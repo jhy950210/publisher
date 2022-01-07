@@ -32,6 +32,7 @@ public class BookApiController {
 
 //    @GetMapping("/books")
 //    public ResponseEntity<Book> bookInfo(@RequestBody Book book) {
+
 //        Book bookInfo = bookService.bookInfo(book.getId());
 //
 //        return ResponseEntity.status(HttpStatus.OK).body(bookInfo);
