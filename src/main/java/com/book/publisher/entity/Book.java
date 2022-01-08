@@ -1,7 +1,9 @@
 package com.book.publisher.entity;
 
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,6 +17,7 @@ import java.util.Date;
 @Entity
 @DynamicInsert
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
 public class Book {
     @Id @GeneratedValue
     @Column(name = "book_id")
@@ -33,4 +36,13 @@ public class Book {
     @CreatedDate
     @Column(columnDefinition = "timestamp(0)")
     private Date regDt;
+
+    @Builder
+    public Book(String bookTitle, String subTitle, int price, String author, LocalDate publishDate) {
+        this.bookTitle = bookTitle;
+        this.subTitle = subTitle;
+        this.price = price;
+        this.author = author;
+        this.publishDate = publishDate;
+    }
 }

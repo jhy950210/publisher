@@ -1,6 +1,7 @@
 package com.book.publisher.service;
 
 import com.book.publisher.entity.Book;
+import com.book.publisher.entity.QBook;
 import com.book.publisher.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class BookService {
     }
 
     @Transactional
-    public List<Book> bookSearchList(Book book) {
-        return this.bookRepository.findByBookTitleContainsAndAuthorOrderByRegDt(book.getBookTitle(),book.getAuthor());
+    public List<Book> bookSearchList(QBook book) {
+        return this.bookRepository.searchBookList(book);
     }
 }
