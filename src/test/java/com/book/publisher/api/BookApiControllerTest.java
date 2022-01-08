@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,13 +59,14 @@ class BookApiControllerTest {
     void bookList() {
         List<Book> bookList = bookService.bookList();
 
-        assertThat(bookList.get(0).getBookTitle()).isEqualTo(bookService.bookInfo((long)1).getBookTitle());
+        assertThat(bookList.get(0).getBookTitle()).isEqualTo(bookService.bookInfo(bookList.get(0).getId()).getBookTitle());
     }
 
     @Test
     @DisplayName("책 수정")
     void bookUpdate() {
-        Book book = bookService.bookInfo(1L);
+        Book books = bookService.bookList().get(0);
+        Book book = bookService.bookInfo(books.getId());
 
         book.setBookTitle("책 제목 수정");
 
