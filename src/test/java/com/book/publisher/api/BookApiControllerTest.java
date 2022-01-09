@@ -1,5 +1,6 @@
 package com.book.publisher.api;
 
+import com.book.publisher.dto.BookSearchDTO;
 import com.book.publisher.entity.Book;
 import com.book.publisher.service.BookService;
 import org.junit.jupiter.api.DisplayName;
@@ -41,17 +42,22 @@ class BookApiControllerTest {
     @Test
     @DisplayName("책 저장")
     void bookInsert() {
-        Book book = new Book();
-            book.setBookTitle("책제목");
-            book.setAuthor("작가");
-            book.setPrice(1000);
-            book.setPublishDate(LocalDate.parse("2021-02-13"));
-            book.setSubTitle("부제");
+        int j = 0;
+        Book book1 = new Book();
+        for(int i=1;i<100;i++) {
+            Book book = new Book();
+            book.setBookTitle("책제목"+i);
+            book.setAuthor("작가"+i);
+            book.setPrice(1000*i);
+            book.setPublishDate(LocalDate.parse("2021-02-13").plusDays(i));
+            book.setSubTitle("부제"+i);
+            Book newBook = bookService.saveBook(book);
+            book1 = newBook;
+        }
 
-        Book newBook = bookService.saveBook(book);
+        Book book = bookService.bookInfo(book1.getId());
 
-
-        assertThat(book.getBookTitle()).isEqualTo(bookService.bookInfo(newBook.getId()).getBookTitle());
+        assertThat(book.getBookTitle()).isEqualTo(bookService.bookInfo(book1.getId()).getBookTitle());
 
 
     }
@@ -100,12 +106,23 @@ class BookApiControllerTest {
         assertThat(bookService.bookInfo((long)random).getBookTitle()).isNull();
     }
 
-//    @Test
-//    @DisplayName("queryDsl 테스트")
-//    void queryDslTest() {
-//        Book book = new Book();
-//        book.setBookTitle("제목");
-//        //book.setAuthor("작가");
-//        List<Book> books = bookService.bookSearchList(book);
-//    }
+    @Test
+    @DisplayName("queryDsl 테스트")
+    void queryDslTest() {
+        BookSearchDTO searchDTO = BookSearchDTO.builder()
+                .bookTitle("제목")
+                .author("작가")
+                .maxPrice(60000)
+                .minPrice(30000)
+                .build();
+
+        List<Book> books = bookService.bookSearchList(searchDTO);
+
+        Book newBook = bookService.bookInfo(books.get(0).getId());
+
+        books.forEach(v -> System.out.println(v.getBookTitle() + " " + v.getPrice()));
+
+        assertThat(books.get(0).getBookTitle()).isEqualTo(newBook.getBookTitle());
+
+    }
 }

@@ -1,8 +1,14 @@
 package com.book.publisher.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookSearchDTO {
 
     private String bookTitle;
@@ -13,12 +19,4 @@ public class BookSearchDTO {
     public enum searchType {
         T,A,NP,XP
     }
-
-    public BookSearchDTO(String bookTitle, String author, int minPrice, int maxPrice) {
-        this.bookTitle = bookTitle;
-        this.author = author;
-        this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
-    }
-
 }

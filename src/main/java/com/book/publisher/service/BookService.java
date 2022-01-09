@@ -1,5 +1,6 @@
 package com.book.publisher.service;
 
+import com.book.publisher.dto.BookSearchDTO;
 import com.book.publisher.entity.Book;
 import com.book.publisher.entity.QBook;
 import com.book.publisher.repository.BookRepository;
@@ -38,7 +39,7 @@ public class BookService {
     }
 
     @Transactional
-    public List<Book> bookSearchList(QBook book) {
-        return this.bookRepository.searchBookList(book);
+    public List<Book> bookSearchList(BookSearchDTO searchBook) {
+        return this.bookRepository.searchBookList(searchBook);
     }
 }
