@@ -16,7 +16,7 @@ public class BookSearchDTO {
     private int minPrice;
     private int maxPrice;
 
-    public enum searchType {
-        T,A,NP,XP
+    public enum bookSearchType {
+        T,A,MNP,MXP;
     }
 }
