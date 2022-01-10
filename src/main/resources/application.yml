@@ -18,6 +18,7 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+    cache: false
 
 
 ---
@@ -62,8 +63,14 @@ spring:
     password: 12345678
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
 
 logging:
   level:
