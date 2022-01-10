@@ -15,7 +15,6 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	//apply plugin: "io.spring.dependency-management"
 }
 
 repositories {
@@ -30,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-devtools:2.5.7'
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 
+
 	// 개발시
 	runtimeOnly 'com.h2database:h2'
 	
@@ -43,6 +43,9 @@ dependencies {
 
 	//querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa'
+
+	// validation 추가
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	annotationProcessor 'com.querydsl:querydsl-apt'
 //	annotationProcessor "jakarta.persistence:jakarta.persistence-api:3.0.0"
 //	annotationProcessor "jakarta.annotation:jakarta.annotation-api:2.0.0"
@@ -52,12 +55,9 @@ test {
 	useJUnitPlatform()
 }
 
-
-
 //querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
 querydsl {
-	//library = "com.querydsl:querydsl-apt"
 	jpa = true
 	querydslSourcesDir = querydslDir
 }
@@ -70,5 +70,4 @@ configurations {
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
-
 //querydsl 추가 끝
