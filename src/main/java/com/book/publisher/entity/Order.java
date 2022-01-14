@@ -58,4 +58,25 @@ public class Order extends BaseEntity{
 
         return order;
     }
+
+    // order 취소
+    public void cancel(){
+        this.setOrderStatus(OrderStatus.CANCEL);
+
+        for (OrderBook orderBook : orderBooks) {
+            orderBook.cancel();
+        }
+    }
+
+    // 총 주문 가격 조회
+    public int getTotalPrice(){
+        int totalPrice = 0;
+
+        for (OrderBook orderBook : orderBooks) {
+            totalPrice += orderBook.getTotalPrice();
+
+        }
+
+        return totalPrice;
+    }
 }

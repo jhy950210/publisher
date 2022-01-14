@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,16 +24,29 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final BookRepository bookRepository;
 
-    public Order order(Long memberId, Long bookId){
+    public Order order(Long memberId, Long... bookIds){
         Member member = memberRepository.findById(memberId).orElseThrow(NullPointerException::new);
 
-        Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
+        List<OrderBook> orderBooks = new ArrayList<>();
 
-        // 주문 책 생성
-        OrderBook orderBook = OrderBook.createOrderBook(book);
+        for (Long bookId : bookIds) {
+            Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
+
+            // 주문 책 생성
+            OrderBook orderBook = OrderBook.createOrderBook(book);
+
+            orderBooks.add(orderBook);
+        }
+
+        int size = orderBooks.size();
+        OrderBook[] toArray = new OrderBook[size];
+
+        for(int i=0; i<size; i++){
+            toArray[i] = orderBooks.get(i);
+        }
 
         // 주문 생성
-        Order order = Order.createOrder(member, orderBook);
+        Order order = Order.createOrder(member, toArray);
 
         Order save = orderRepository.save(order);
 
