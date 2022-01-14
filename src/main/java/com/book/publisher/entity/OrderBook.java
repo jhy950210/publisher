@@ -26,6 +26,8 @@ public class OrderBook {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    private int count;
+
     public void setOrder(Order order) {
         this.order = order;
     }
@@ -34,10 +36,21 @@ public class OrderBook {
         this.book = book;
     }
 
+    // 주문 책 생성
     public static OrderBook createOrderBook(Book book){
         OrderBook orderBook = new OrderBook();
         orderBook.setBook(book);
 
         return orderBook;
+    }
+
+    // 주문 책 취소
+    public void cancel() {
+        this.getBook().addStock(count);
+    }
+
+    // 총 책 가격 조회
+    public int getTotalPrice(){
+        return this.getBook().getPrice() * getCount();
     }
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -50,14 +51,22 @@ class OrderServiceTest {
 
         memberService.join(member1);
 
-        Book book = new Book();
-        book.setBookTitle("책제목");
-        book.setAuthor("작가");
-        book.setPrice(1000);
-        book.setPublishDate(LocalDate.parse("2021-02-13"));
-        book.setSubTitle("부제");
+        Book book1 = new Book();
+        book1.setBookTitle("책제목1");
+        book1.setAuthor("작가1");
+        book1.setPrice(1000);
+        book1.setPublishDate(LocalDate.parse("2021-02-13"));
+        book1.setSubTitle("부제1");
 
-        bookService.saveBook(book);
+        Book book2 = new Book();
+        book2.setBookTitle("책제목2");
+        book2.setAuthor("작가2");
+        book2.setPrice(2000);
+        book2.setPublishDate(LocalDate.parse("2021-02-13"));
+        book2.setSubTitle("부제2");
+
+        bookService.saveBook(book1);
+        bookService.saveBook(book2);
 
     }
 
@@ -65,7 +74,7 @@ class OrderServiceTest {
     @DisplayName("주문 생성")
     void createOrder(){
         // when
-        Order order = orderService.order(1L, 2L);
+        Order order = orderService.order(1L, 2L, 3l);
 
         List<Order> allOrders = orderRepository.findAllOrders();
 
@@ -76,5 +85,18 @@ class OrderServiceTest {
         }
         // then
         assertEquals(OrderStatus.ORDER, order.getOrderStatus());
+    }
+
+    @Test
+    @DisplayName("주문 취소")
+    void cancelOrder(){
+        // given
+        Order order = orderService.order(1L, 2L, 3l);
+
+        // when
+        orderService.cancelOrder(order.getId());
+
+        // then
+        assertEquals(OrderStatus.CANCEL, order.getOrderStatus());
     }
 }
