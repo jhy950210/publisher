@@ -1,6 +1,7 @@
 package com.book.publisher.service;
 
 import com.book.publisher.entity.Member;
+import com.book.publisher.exception.NotExistMemberException;
 import com.book.publisher.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class MemberService {
     }
 
     public Member getMember(Long id){
-        Member member = memberRepository.findById(id).orElseThrow(NullPointerException::new);
+        Member member = memberRepository.findById(id).orElseThrow(NotExistMemberException::new);
 
         return member;
     }
@@ -63,6 +64,7 @@ public class MemberService {
         if(member.getAddress() != null){
             findMember.setAddress(member.getAddress());
         }
+
 
         return findMember;
     }

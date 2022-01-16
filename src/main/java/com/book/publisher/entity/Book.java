@@ -1,6 +1,7 @@
 package com.book.publisher.entity;
 
 
+import com.book.publisher.exception.NotEnoughStockException;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,9 +17,8 @@ import java.util.Date;
 @Data
 @Entity
 @DynamicInsert
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
-public class Book {
+public class Book extends BaseEntity{
     @Id @GeneratedValue
     @Column(name = "book_id")
     private long id;
@@ -33,16 +33,40 @@ public class Book {
     @DateTimeFormat(pattern = "YYYY-MM-DD")
     private LocalDate publishDate;
 
-    @CreatedDate
+    /*@CreatedDate
     @Column(columnDefinition = "timestamp(0)")
-    private Date regDt;
+    private Date regDt;*/
+
+    // 수량
+    private int stockQuantity;
 
     @Builder
-    public Book(String bookTitle, String subTitle, int price, String author, LocalDate publishDate) {
+    public Book(String bookTitle, String subTitle, int price, String author, LocalDate publishDate, int stockQuantity) {
         this.bookTitle = bookTitle;
         this.subTitle = subTitle;
         this.price = price;
         this.author = author;
         this.publishDate = publishDate;
+        this.stockQuantity = stockQuantity;
+    }
+
+    /**
+     * stock 증가
+     */
+    public void addStock(int quantity){
+        this.stockQuantity += quantity;
+    }
+
+    /**
+     * stock 감소
+     */
+    public void removeStock(int quantity){
+        int restStock = this.stockQuantity - quantity;
+
+        if(restStock < 0){
+            throw new NotEnoughStockException();
+        }
+
+        this.stockQuantity = restStock;
     }
 }
