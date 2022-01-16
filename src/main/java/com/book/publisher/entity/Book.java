@@ -1,6 +1,7 @@
 package com.book.publisher.entity;
 
 
+import com.book.publisher.exception.NotEnoughStockException;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,7 @@ public class Book extends BaseEntity{
     @Column(columnDefinition = "timestamp(0)")
     private Date regDt;*/
 
+    // 수량
     private int stockQuantity;
 
     @Builder
@@ -62,7 +64,7 @@ public class Book extends BaseEntity{
         int restStock = this.stockQuantity - quantity;
 
         if(restStock < 0){
-            //throw new NotEnoughStockException("need more stock");
+            throw new NotEnoughStockException();
         }
 
         this.stockQuantity = restStock;

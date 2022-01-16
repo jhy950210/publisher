@@ -17,7 +17,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OrderServiceTest {
 
@@ -95,8 +94,9 @@ class OrderServiceTest {
 
         // when
         orderService.cancelOrder(order.getId());
+        Order order1 = orderRepository.findById(order.getId()).get();
 
         // then
-        assertEquals(OrderStatus.CANCEL, order.getOrderStatus());
+        assertEquals(OrderStatus.CANCEL, order1.getOrderStatus());
     }
 }

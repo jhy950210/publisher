@@ -15,7 +15,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Order extends BaseEntity{
 
     @Id @GeneratedValue

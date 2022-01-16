@@ -2,6 +2,7 @@ package com.book.publisher.service;
 
 import com.book.publisher.entity.Address;
 import com.book.publisher.entity.Member;
+import com.book.publisher.exception.NotExistMemberException;
 import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -107,9 +108,9 @@ class MemberServiceTest {
     void deleteMember() throws NullPointerException {
 
         //when
-        memberService.deleteMember(1L);
+        memberService.deleteMember(3L);
 
         //then
-        assertThrows(NullPointerException.class, ()-> memberService.getMember(1L));
+        assertThrows(NotExistMemberException.class, ()-> memberService.getMember(3L));
     }
 }

@@ -11,7 +11,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class OrderBook {
 
     @Id @GeneratedValue
@@ -26,6 +26,7 @@ public class OrderBook {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    // 주문 수량
     private int count;
 
     public void setOrder(Order order) {
@@ -36,10 +37,17 @@ public class OrderBook {
         this.book = book;
     }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     // 주문 책 생성
-    public static OrderBook createOrderBook(Book book){
+    public static OrderBook createOrderBook(Book book, int count){
         OrderBook orderBook = new OrderBook();
         orderBook.setBook(book);
+        orderBook.setCount(count);
+
+        book.removeStock(count);
 
         return orderBook;
     }

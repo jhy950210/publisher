@@ -30,21 +30,22 @@ public class OrderService {
 
         List<OrderBook> orderBooks = new ArrayList<>();
 
-        for (Long bookId : bookIds) {
-            Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
-
-            // 주문 책 생성
-            OrderBook orderBook = OrderBook.createOrderBook(book);
-
-            orderBooks.add(orderBook);
-        }
-
         int size = orderBooks.size();
         OrderBook[] toArray = new OrderBook[size];
 
         for(int i=0; i<size; i++){
             toArray[i] = orderBooks.get(i);
         }
+
+        for (Long bookId : bookIds) {
+            Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
+
+            // 주문 책 생성
+            OrderBook orderBook = OrderBook.createOrderBook(book, size);
+
+            orderBooks.add(orderBook);
+        }
+
 
         // 주문 생성
         Order order = Order.createOrder(member, toArray);
