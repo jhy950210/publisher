@@ -42,6 +42,7 @@ public class Order extends BaseEntity{
 
     public void setMember(Member member) {
         this.member = member;
+        System.out.println("this = " + this);
         member.getOrders().add(this);
     }
 

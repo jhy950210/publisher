@@ -2,13 +2,14 @@ package com.book.publisher.api;
 
 import com.book.publisher.dto.BookSearchDTO;
 import com.book.publisher.entity.Book;
+import com.book.publisher.repository.BookRepository;
 import com.book.publisher.service.BookService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,34 +17,19 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
+@Transactional
 class BookApiControllerTest {
 
     @Autowired
     BookService bookService;
 
+    @Autowired
+    BookRepository bookRepository;
 
-//    @RepeatedTest(value = 5)
-//    @BeforeAll
-//    static void bookEntity(@Autowired BookService bookService,RepetitionInfo ri) {
-//        Book book = new Book();
-//        book.setBookTitle("책제목"+ ri.getCurrentRepetition());
-//        book.setAuthor("작가"+ri.getCurrentRepetition());
-//        book.setPrice(1000);
-//        book.setPublishDate(LocalDate.parse("2021-02-13").plusDays(ri.getCurrentRepetition()));
-//        book.setSubTitle("부제"+ri.getCurrentRepetition());
-//
-//        Book newBook = bookService.saveBook(book);
-//
-//        assertThat(book.getBookTitle()).isEqualTo(newBook.getBookTitle());
-//    }
+    @BeforeEach
+    void init(){
 
-    @Test
-    @DisplayName("책 저장")
-    void bookInsert() {
-        int j = 0;
-        Book book1 = new Book();
         for(int i=1;i<100;i++) {
             Book book = new Book();
             book.setBookTitle("책제목"+i);
@@ -51,21 +37,14 @@ class BookApiControllerTest {
             book.setPrice(1000*i);
             book.setPublishDate(LocalDate.parse("2021-02-13").plusDays(i));
             book.setSubTitle("부제"+i);
-            Book newBook = bookService.saveBook(book);
-            book1 = newBook;
+            bookRepository.save(book);
         }
-
-        Book book = bookService.bookInfo(book1.getId());
-
-        assertThat(book.getBookTitle()).isEqualTo(bookService.bookInfo(book1.getId()).getBookTitle());
-
-
     }
 
     @Test
     @DisplayName("책 리스트 검색")
     void bookList() {
-        int random = (int)(Math.random()*5)+1;
+        int random = (int)(Math.random()*5)+1;  // ?
 
         List<Book> bookList = bookService.bookList();
 
@@ -124,5 +103,10 @@ class BookApiControllerTest {
 
         assertThat(books.get(0).getBookTitle()).isEqualTo(newBook.getBookTitle());
 
+    }
+
+    @AfterEach
+    void clean(){
+        bookRepository.deleteAll();
     }
 }

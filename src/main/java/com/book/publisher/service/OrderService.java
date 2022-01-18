@@ -23,35 +23,20 @@ public class OrderService {
 
     // 기본 주문 생성
     @Transactional
-    public Order order(Long memberId, Long... bookIds){
+    public Order order(Long memberId, Long bookId, int count){
         Member member = memberRepository.findById(memberId).orElseThrow(NullPointerException::new);
 
-        List<OrderBook> orderBooks = new ArrayList<>();
-
-        int size = orderBooks.size();
-        OrderBook[] convertOrderBooksListtoArray = new OrderBook[size];
+        Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
 
         // 주문 책 생성
-        for(int i=0; i<size; i++){
-            convertOrderBooksListtoArray[i] = orderBooks.get(i);
-        }
-
-        for (Long bookId : bookIds) {
-            Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
-
-            OrderBook orderBook = OrderBook.createOrderBook(book, size);
-
-            orderBooks.add(orderBook);
-        }
+        OrderBook orderBook = OrderBook.createOrderBook(book, count);
 
         // 배송정보 생성
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
 
-
-
         // 주문 생성
-        Order order = Order.createOrder(member, delivery, convertOrderBooksListtoArray);
+        Order order = Order.createOrder(member, delivery, orderBook);
 
         Order saveOrder = orderRepository.save(order);
 
@@ -60,33 +45,20 @@ public class OrderService {
 
     // 배송 주소 직접 입력한 주문 생성
     @Transactional
-    public Order order(Long memberId, Address address,Long... bookIds){
+    public Order order(Long memberId, Address address, Long bookId, int count){
         Member member = memberRepository.findById(memberId).orElseThrow(NullPointerException::new);
 
-        List<OrderBook> orderBooks = new ArrayList<>();
-
-        int size = orderBooks.size();
-        OrderBook[] convertOrderBooksListtoArray = new OrderBook[size];
+        Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
 
         // 주문 책 생성
-        for(int i=0; i<size; i++){
-            convertOrderBooksListtoArray[i] = orderBooks.get(i);
-        }
-
-        for (Long bookId : bookIds) {
-            Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
-
-            OrderBook orderBook = OrderBook.createOrderBook(book, size);
-
-            orderBooks.add(orderBook);
-        }
+        OrderBook orderBook = OrderBook.createOrderBook(book, count);
 
         // 배송정보 생성
         Delivery delivery = new Delivery();
         delivery.setAddress(address);
 
         // 주문 생성
-        Order order = Order.createOrder(member, delivery, convertOrderBooksListtoArray);
+        Order order = Order.createOrder(member, delivery, orderBook);
 
         Order saveOrder = orderRepository.save(order);
 
