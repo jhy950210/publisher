@@ -1,102 +1,106 @@
 package com.book.publisher.service;
 
 import com.book.publisher.entity.*;
+import com.book.publisher.entity.Order;
+import com.book.publisher.repository.BookRepository;
+import com.book.publisher.repository.MemberRepository;
 import com.book.publisher.repository.OrderRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 class OrderServiceTest {
 
     @Autowired
-    OrderService orderService;
-
+    private OrderService orderService;
     @Autowired
-    OrderRepository orderRepository;
-
+    private OrderRepository orderRepository;
     @Autowired
-    MemberService memberService;
-
+    private MemberRepository memberRepository;
     @Autowired
-    BookService bookService;
+    private BookRepository bookRepository;
 
-    @BeforeAll
-    void init(){
+    @Test
+    @DisplayName("주문 생성")
+    public void createOrder() throws Exception{
+        //given
+        Member member = createMember("testOrder","testOrder@gmail.com");
+
+        Book book = createBook("주문책");
+
+        //when
+        Order order = orderService.order(member.getId(), book.getId(),2);
+
+        //then
+        Order getOrder = orderRepository.findById(order.getId()).get();
+
+        assertEquals(OrderStatus.ORDER, getOrder.getOrderStatus());
+    }
+
+    @Test
+    @DisplayName("주문 취소")
+    public void cancelOrder() throws Exception{
+        //given
+        Member member = createMember("testOrder","testOrder@gmail.com");
+
+        Book book = createBook("주문책");
+
+        Order order = orderService.order(member.getId(), book.getId(),2);
+
+        //when
+        orderService.cancelOrder(order.getId());
+
+        //then
+        Order getOrder = orderRepository.findById(order.getId()).get();
+
+        assertEquals(OrderStatus.CANCEL, getOrder.getOrderStatus());
+
+    }
+
+    private Member createMember(String name, String email) {
         Address address = Address.builder()
                 .city("경기 고양시 일산서구")
                 .street("킨텍스로 240")
                 .zipcode("100동 1111호")
                 .build();
 
-        Member member1 = Member.builder()
-                .name("test1")
-                .email("test111@gmail.com")
+        Member member = Member.builder()
+                .name(name)
+                .email(email)
                 .phoneNumber("010-1234-1234")
                 .residentRegistrationNumber("950210-1111111")
                 .address(address)
                 .build();
 
-        memberService.join(member1);
+        Member save = memberRepository.save(member);
+        memberRepository.flush();
 
-        Book book1 = new Book();
-        book1.setBookTitle("책제목1");
-        book1.setAuthor("작가1");
-        book1.setPrice(1000);
-        book1.setPublishDate(LocalDate.parse("2021-02-13"));
-        book1.setSubTitle("부제1");
-
-        Book book2 = new Book();
-        book2.setBookTitle("책제목2");
-        book2.setAuthor("작가2");
-        book2.setPrice(2000);
-        book2.setPublishDate(LocalDate.parse("2021-02-13"));
-        book2.setSubTitle("부제2");
-
-        bookService.saveBook(book1);
-        bookService.saveBook(book2);
-
+        return save;
     }
 
-    @Test
-    @DisplayName("주문 생성")
-    void createOrder(){
-        // when
-        Order order = orderService.order(1L, 2L, 3l);
+    private Book createBook(String name) {
+        Book book = new Book();
+        book.setBookTitle(name);
+        book.setAuthor("작가1");
+        book.setStockQuantity(10);
+        book.setPrice(1000);
+        book.setPublishDate(LocalDate.parse("2021-02-13"));
+        book.setSubTitle("부제1");
 
-        List<Order> allOrders = orderRepository.findAllOrders();
+        Book save = bookRepository.save(book);
 
-        for (Order allOrder : allOrders) {
-            System.out.println("member = " + allOrder.getMember());
-            System.out.println("book = " + allOrder.getOrderBooks());
-
-        }
-        // then
-        assertEquals(OrderStatus.ORDER, order.getOrderStatus());
-    }
-
-    @Test
-    @DisplayName("주문 취소")
-    void cancelOrder(){
-        // given
-        Order order = orderService.order(1L, 2L, 3l);
-
-        // when
-        orderService.cancelOrder(order.getId());
-        Order order1 = orderRepository.findById(order.getId()).get();
-
-        // then
-        assertEquals(OrderStatus.CANCEL, order1.getOrderStatus());
+        return save;
     }
 }

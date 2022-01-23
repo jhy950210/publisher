@@ -3,11 +3,13 @@ package com.book.publisher.service;
 import com.book.publisher.entity.Address;
 import com.book.publisher.entity.Member;
 import com.book.publisher.exception.NotExistMemberException;
+import com.book.publisher.repository.MemberRepository;
 import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -17,13 +19,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.*;
 
 @SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
+@Transactional
 class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
 
-    @BeforeAll
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @BeforeEach
     void init(){
         Address address = Address.builder()
                 .city("경기 고양시 일산서구")
@@ -31,24 +36,17 @@ class MemberServiceTest {
                 .zipcode("100동 1111호")
                 .build();
 
-        Member member1 = Member.builder()
+        Member member = Member.builder()
                 .name("test1")
                 .email("test111@gmail.com")
                 .phoneNumber("010-1234-1234")
                 .residentRegistrationNumber("950210-1111111")
                 .address(address)
                 .build();
+        
 
-        Member member2 = Member.builder()
-                .name("test2")
-                .email("test222@gmail.com")
-                .phoneNumber("010-1234-1234")
-                .residentRegistrationNumber("950210-2222222")
-                .address(address)
-                .build();
+        memberService.join(member);
 
-        memberService.join(member1);
-        memberService.join(member2);
     }
 
     @Test
@@ -74,16 +72,34 @@ class MemberServiceTest {
 
 
         //then
-        assertEquals(join.getName(),"test3");
+        assertEquals("test3",join.getName());
     }
 
     @Test
     @DisplayName("회원 조회")
     void getMember(){
         //given
-        Member member = memberService.getMember(2L);
+        Address address = Address.builder()
+                .city("경기 고양시 일산서구")
+                .street("킨텍스로 240")
+                .zipcode("100동 1111호")
+                .build();
 
-        assertEquals(member.getName(), "test2");
+        Member member2 = Member.builder()
+                .name("test2")
+                .email("test222@gmail.com")
+                .phoneNumber("010-1234-1234")
+                .residentRegistrationNumber("950210-2222222")
+                .address(address)
+                .build();
+
+        memberService.join(member2);
+
+        //when
+        Member member = memberService.getMember(member2.getId());
+
+        //then
+        assertEquals(member2.getName(), member.getName());
     }
 
     @Test
@@ -95,9 +111,11 @@ class MemberServiceTest {
                 .phoneNumber("123-1234-1234")
                 .build();
 
+        Member testMember = memberService.getMembers().get(0);
+
         //when
-        Member member = memberService.updateMember(2L,changeInfo);
-        Member member1 = memberService.getMember(2L);
+        Member member = memberService.updateMember(testMember.getId(),changeInfo);
+        Member member1 = memberService.getMember(testMember.getId());
 
         //then
         assertEquals(member1.getEmail(), member.getEmail());
@@ -105,12 +123,19 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원 탈퇴")
-    void deleteMember() throws NullPointerException {
+    void deleteMember(){
+        //given
+        Member testMember = memberService.getMembers().get(0);
 
         //when
-        memberService.deleteMember(3L);
+        memberService.deleteMember(testMember.getId());
 
         //then
-        assertThrows(NotExistMemberException.class, ()-> memberService.getMember(3L));
+        assertThrows(NotExistMemberException.class, ()-> memberService.getMember(testMember.getId()));
+    }
+
+    @AfterEach
+    void clean(){
+        memberRepository.deleteAll();
     }
 }

@@ -1,9 +1,6 @@
 package com.book.publisher.service;
 
-import com.book.publisher.entity.Book;
-import com.book.publisher.entity.Member;
-import com.book.publisher.entity.Order;
-import com.book.publisher.entity.OrderBook;
+import com.book.publisher.entity.*;
 import com.book.publisher.repository.BookRepository;
 import com.book.publisher.repository.MemberRepository;
 import com.book.publisher.repository.OrderRepository;
@@ -24,35 +21,48 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final BookRepository bookRepository;
 
+    // 기본 주문 생성
     @Transactional
-    public Order order(Long memberId, Long... bookIds){
+    public Order order(Long memberId, Long bookId, int count){
         Member member = memberRepository.findById(memberId).orElseThrow(NullPointerException::new);
 
-        List<OrderBook> orderBooks = new ArrayList<>();
+        Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
 
-        int size = orderBooks.size();
-        OrderBook[] toArray = new OrderBook[size];
+        // 주문 책 생성
+        OrderBook orderBook = OrderBook.createOrderBook(book, count);
 
-        for(int i=0; i<size; i++){
-            toArray[i] = orderBooks.get(i);
-        }
-
-        for (Long bookId : bookIds) {
-            Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
-
-            // 주문 책 생성
-            OrderBook orderBook = OrderBook.createOrderBook(book, size);
-
-            orderBooks.add(orderBook);
-        }
-
+        // 배송정보 생성
+        Delivery delivery = new Delivery();
+        delivery.setAddress(member.getAddress());
 
         // 주문 생성
-        Order order = Order.createOrder(member, toArray);
+        Order order = Order.createOrder(member, delivery, orderBook);
 
-        Order save = orderRepository.save(order);
+        Order saveOrder = orderRepository.save(order);
 
-        return save;
+        return saveOrder;
+    }
+
+    // 배송 주소 직접 입력한 주문 생성
+    @Transactional
+    public Order order(Long memberId, Address address, Long bookId, int count){
+        Member member = memberRepository.findById(memberId).orElseThrow(NullPointerException::new);
+
+        Book book = bookRepository.findById(bookId).orElseThrow(NullPointerException::new);
+
+        // 주문 책 생성
+        OrderBook orderBook = OrderBook.createOrderBook(book, count);
+
+        // 배송정보 생성
+        Delivery delivery = new Delivery();
+        delivery.setAddress(address);
+
+        // 주문 생성
+        Order order = Order.createOrder(member, delivery, orderBook);
+
+        Order saveOrder = orderRepository.save(order);
+
+        return saveOrder;
     }
 
     /**

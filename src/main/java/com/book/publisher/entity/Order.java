@@ -32,12 +32,17 @@ public class Order extends BaseEntity{
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderBook> orderBooks = new ArrayList<>();
 
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "delivery_id")
+    private Delivery delivery;
+
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
     public void setMember(Member member) {
         this.member = member;
+        System.out.println("this = " + this);
         member.getOrders().add(this);
     }
 
@@ -46,11 +51,17 @@ public class Order extends BaseEntity{
         orderBook.setOrder(this);
     }
 
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+        delivery.setOrder(this);
+    }
+
     // order 생성
-    public static Order createOrder(Member member, OrderBook... orderBooks){
+    public static Order createOrder(Member member, Delivery delivery, OrderBook... orderBooks){
         Order order = new Order();
         order.setOrderStatus(OrderStatus.ORDER);
         order.setMember(member);
+        order.setDelivery(delivery);
 
         for (OrderBook orderBook : orderBooks) {
             order.addOrderBook(orderBook);

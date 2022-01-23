@@ -3,6 +3,7 @@ package com.book.publisher.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -13,9 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Member extends BaseEntity{
 
     @Id @GeneratedValue
@@ -35,6 +34,15 @@ public class Member extends BaseEntity{
 
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
+
+    @Builder
+    public Member(String name, String email, String phoneNumber, String residentRegistrationNumber, Address address) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.residentRegistrationNumber = residentRegistrationNumber;
+        this.address = address;
+    }
 
     // 회원정보 수정
     public void changeInfo(String email, String phoneNumber, Address address){
