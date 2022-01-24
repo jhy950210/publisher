@@ -85,7 +85,6 @@ class OrderServiceTest {
                 .build();
 
         Member save = memberRepository.save(member);
-        memberRepository.flush();
 
         return save;
     }

@@ -9,7 +9,10 @@ public enum ErrorCode {
     BAD_REQUEST(400, "요구된 처리를 하기에 적합한 상태가 아닙니다."),
 
     // Member
-    NOT_EXIST_MEMBER(404, "존재하지 않는 회원입니다.");
+    NOT_EXIST_MEMBER(404, "존재하지 않는 회원입니다."),
+
+    // Order
+    NOT_EXIST_ORDER(404,"존재하지 않는 주문입니다.");
 
     private int status;
     private String message;

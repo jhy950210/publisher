@@ -1,6 +1,7 @@
 package com.book.publisher.common;
 
 import com.book.publisher.exception.NotExistMemberException;
+import com.book.publisher.exception.NotExistOrderException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,8 +35,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
+    @ExceptionHandler(NotExistOrderException.class)
+    private ResponseEntity handleNotExistOrderException(){
+        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.NOT_EXIST_ORDER);
+        HttpStatus httpStatus = HttpStatus.valueOf(errorResponse.getStatus());
+
+        return ResponseEntity.status(httpStatus).body(errorResponse);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
-    private ResponseEntity handleIllegalArgumentExceptio(){
+    private ResponseEntity handleIllegalArgumentException(){
         ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.BAD_REQUEST);
         HttpStatus httpStatus = HttpStatus.valueOf(errorResponse.getStatus());
 
