@@ -1,6 +1,8 @@
 package com.book.publisher.service;
 
 import com.book.publisher.entity.*;
+import com.book.publisher.exception.NotExistMemberException;
+import com.book.publisher.exception.NotExistOrderException;
 import com.book.publisher.repository.BookRepository;
 import com.book.publisher.repository.MemberRepository;
 import com.book.publisher.repository.OrderRepository;
@@ -71,9 +73,25 @@ public class OrderService {
     @Transactional
     public void cancelOrder(Long orderId){
         //주문 엔티티 조회
-        Order order = orderRepository.findById(orderId).orElseThrow(NullPointerException::new);
+        Order order = orderRepository.findById(orderId).orElseThrow(NotExistOrderException::new);
 
         //주문 취소
         order.cancel();
+    }
+
+
+    /**
+     * 주문 조회
+     */
+    public List<Order> getOrders(){
+        List<Order> orders = orderRepository.findAll();
+
+        return orders;
+    }
+
+    public Order getOrder(Long id){
+        Order order = orderRepository.findById(id).orElseThrow(() -> new NotExistOrderException());
+
+        return order;
     }
 }
