@@ -3,6 +3,8 @@ package com.book.publisher.api;
 import com.book.publisher.entity.Address;
 import com.book.publisher.entity.Member;
 import com.book.publisher.service.MemberService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,10 +17,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Api(tags = {"회원 API"})
 public class MemberApiController {
 
     private final MemberService memberService;
 
+    @ApiOperation(value = "회원목록 전체조회")
     @GetMapping("/members")
     public ResponseEntity getMembers(){
         List<Member> members = memberService.getMembers();
