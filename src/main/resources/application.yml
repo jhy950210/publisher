@@ -1,11 +1,11 @@
 server:
-  port: 8088
+  port: 808
   tomcat:
     uri-encoding: utf-8
 
 spring:
   profiles:
-    active: jhy
+    active: ojh
     group:
       "jhy": "jhy,common"
       "ojh": "ojh,common"
