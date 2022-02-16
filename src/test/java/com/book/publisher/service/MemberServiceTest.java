@@ -107,7 +107,7 @@ class MemberServiceTest {
     void updateMember(){
         //given
         Member changeInfo = Member.builder()
-                .email("test444@gmail.com")
+                .email("test555@gmail.com")
                 .phoneNumber("123-1234-1234")
                 .build();
 
@@ -125,13 +125,27 @@ class MemberServiceTest {
     @DisplayName("회원 탈퇴")
     void deleteMember(){
         //given
-        Member testMember = memberService.getMembers().get(0);
+        Address address = Address.builder()
+                .city("경기 고양시 일산서구")
+                .street("킨텍스로 240")
+                .zipcode("100동 1111호")
+                .build();
+
+        Member member4 = Member.builder()
+                .name("test4")
+                .email("test444@gmail.com")
+                .phoneNumber("010-1234-1234")
+                .residentRegistrationNumber("950210-4444444")
+                .address(address)
+                .build();
+
+        memberService.join(member4);
 
         //when
-        memberService.deleteMember(testMember.getId());
+        memberService.deleteMember(member4.getId());
 
         //then
-        assertThrows(NotExistMemberException.class, ()-> memberService.getMember(testMember.getId()));
+        assertThrows(NotExistMemberException.class, ()-> memberService.getMember(member4.getId()));
     }
 
     @AfterEach
