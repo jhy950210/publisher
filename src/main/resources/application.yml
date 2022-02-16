@@ -24,7 +24,10 @@ spring:
 ---
 
 spring:
-  profiles: jhy
+  config:
+    activate:
+      on-profile: "jhy"
+
   datasource:
     url: jdbc:h2:tcp://localhost/~/publisher;
     username: jhy
