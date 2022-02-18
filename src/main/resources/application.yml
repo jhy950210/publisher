@@ -1,11 +1,9 @@
 server:
   port: 8080
-  tomcat:
-    uri-encoding: utf-8
 
 spring:
   profiles:
-    active: jhy
+    active: ojh
     group:
       "jhy": "jhy,common"
       "ojh": "ojh,common"
@@ -14,11 +12,11 @@ spring:
   config:
     activate:
       on-profile: "common"
-#
-#  thymeleaf:
-#    prefix: classpath:/templates/
-#    suffix: .html
-#    cache: false
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
 
 
 ---
@@ -43,6 +41,9 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
 
 logging:
   level:
