@@ -5,6 +5,9 @@ import com.book.publisher.exception.NotExistMemberException;
 import com.book.publisher.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +17,8 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
+
 
     private final MemberRepository memberRepository;
 
@@ -74,4 +78,10 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Member> member = memberRepository.findByName(username);
+
+        return member.orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 회원입니다."));
+    }
 }
