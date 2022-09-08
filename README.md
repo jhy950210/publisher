@@ -1,5 +1,6 @@
 # publisher
 url : http://ec2-15-164-75-68.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui.html
+// 현재 서버 내려놓음.
 
 ## 기술스택
 - Java 11
